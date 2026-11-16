@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- Viewport tag makes the website responsive on mobile phones -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chronos Vault - Luxury Watch Collector</title>
+
+    <!-- ================= BASIC CSS STYLING ================= -->
+    <style>
+        /* 1. Basic Reset & Page Styling */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Georgia', serif; /* Classic luxury font */
+        }
+
+        body {
+            background-color: #12161f; /* Deep luxury navy-dark background */
+            color: #f4f4f6;            /* Soft white text for readability */
+            padding: 20px;
+            line-height: 1.5;
+        }
+
+        /* Centered container so the page doesn't stretch too wide */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* 2. Header Styling */
+        header {
+            text-align: center;
+            padding: 25px 15px;
+            border-bottom: 2px solid #d4af37; /* Gold border */
+            margin-bottom: 25px;
+        }
+
+        header h1 {
+            color: #d4af37; /* Classic Gold */
+            font-size: 32px;
+            letter-spacing: 2px;
+        }
+
+        header p {
+            color: #a0aab8;
+            font-size: 15px;
+            font-family: Arial, sans-serif;
+            margin-top: 5px;
+        }
+
+        /* 3. Summary Statistics Bar (Uses Flexbox) */
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-box {
+            background-color: #1c2230;
+            border: 1px solid #d4af37;
+            border-radius: 8px;
+            padding: 15px;
+            flex: 1; /* Makes all 3 boxes equal width */
+            text-align: center;
+        }
+
+        .stat-box h3 {
+            font-size: 13px;
+            color: #a0aab8;
+            text-transform: uppercase;
+            font-family: Arial, sans-serif;
+        }
+
+        .stat-box p {
+            font-size: 24px;
+            color: #d4af37;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        /* 4. Section Boxes (Form & Filter Bar) */
+        .panel {
+            background-color: #1c2230;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            border: 1px solid #2e384d;
+        }
+
+        .panel-title {
+            color: #d4af37;
+            margin-bottom: 15px;
+            font-size: 18px;
+            border-bottom: 1px solid #2e384d;
+            padding-bottom: 8px;
+        }
+
+        /* Form Row using Flexbox */
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        input, select {
+            flex: 1;
+            min-width: 150px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #3c4862;
+            background-color: #12161f;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+        }
+
+        /* Buttons */
+        button {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+        }
+
+        .btn-gold {
+            background-color: #d4af37;
+            color: #12161f;
+        }
+
+        .btn-gold:hover {
+            background-color: #e5c352;
+        }
+
+        /* 5. Watch Showcase Grid (Uses CSS Grid) */
+        .watch-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3 columns on desktop */
+            gap: 20px;
+        }
+
+        /* Individual Watch Card */
+        .watch-card {
+            background-color: #1c2230;
+            border: 1px solid #2e384d;
+            border-radius: 8px;
+            overflow: hidden;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* Highlight card border if it is marked as a favorite */
+        .watch-card.favorite-border {
+            border: 2px solid #d4af37;
+        }
+
+        .watch-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            background-color: #0d1017;
+        }
+
+        .badge {
+            display: inline-block;
+            background-color: #2e384d;
+            color: #d4af37;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-family: Arial, sans-serif;
+            margin-bottom: 8px;
+        }
+
+        .watch-brand {
+            font-size: 13px;
+            color: #a0aab8;
+            text-transform: uppercase;
+            font-family: Arial, sans-serif;
+        }
+
+        .watch-model {
+            font-size: 20px;
+            color: #ffffff;
+            margin: 4px 0;
+        }
+
+        .watch-details {
+            font-size: 14px;
+            color: #cccccc;
+            font-family: Arial, sans-serif;
+            margin: 6px 0;
+        }
+
+        .watch-price {
+            font-size: 18px;
+            color: #d4af37;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        /* Card Action Buttons */
+        .card-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .btn-fav {
+            flex: 1;
+            background-color: #2e384d;
+            color: #ffffff;
+        }
+
+        .btn-fav.active {
+            background-color: #d4af37;
+            color: #12161f;
+        }
+
+        .btn-delete {
+            background-color: #8b2635;
+            color: #ffffff;
+        }
+
+        /* Message box for form validation (No alert() used) */
+        #messageBox {
+            color: #ff8a8a;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        /* 6. Media Query for Mobile & Tablet Responsiveness */
+        @media (max-width: 850px) {
+            .watch-grid {
+                grid-template-columns: repeat(2, 1fr); /* 2 columns on tablet */
+            }
+        }
+
+        @media (max-width: 550px) {
+            .stats-bar {
+                flex-direction: column; /* Stack stat boxes on mobile */
+            }
+            .watch-grid {
+                grid-template-columns: 1fr; /* 1 column on mobile phone */
+            }
+            .form-row {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- HEADER SECTION -->
+        <header>
+            <h1>CHRONOS VAULT</h1>
+            <p>Luxury Watch Collector &amp; Horology Timepiece Showcase</p>
+        </header>
+
+        <!-- MAIN CONTENT -->
+        <main>
+            <!-- 1. SUMMARY STATISTICS BAR -->
+            <section class="stats-bar">
+                <div class="stat-box">
+                    <h3>Total Timepieces</h3>
+                    <p id="totalCount">0</p>
+                </div>
+                <div class="stat-box">
+                    <h3>Total Collection Value</h3>
+                    <p id="totalValue">$0</p>
+                </div>
+                <div class="stat-box">
+                    <h3>Mechanical / Automatic</h3>
+                    <p id="mechanicalCount">0</p>
+                </div>
+            </section>
+
+            <!-- 2. ADD NEW TIMEPIECE FORM -->
+            <section class="panel">
+                <h2 class="panel-title">Add New Timepiece to Collection</h2>
+                <form id="watchForm" onsubmit="addNewWatch(event)">
+                    <div class="form-row">
+                        <input type="text" id="brandInput" placeholder="Brand (e.g., Cartier)" required>
+                        <input type="text" id="modelInput" placeholder="Model (e.g., Santos)" required>
+                        
+                        <select id="movementInput">
+                            <option value="Automatic">Automatic</option>
+                            <option value="Manual Wind">Manual Wind</option>
+                            <option value="Quartz">Quartz</option>
+                        </select>
+
+                        <input type="number" id="diameterInput" placeholder="Case Size (mm)" min="20" max="60" required>
+                        <input type="number" id="priceInput" placeholder="Price ($ USD)" min="1" required>
+                        <input type="url" id="imageInput" placeholder="Image URL (Optional)">
+                        
+                        <button type="submit" class="btn-gold">+ Add Watch</button>
+                    </div>
+                    <p id="messageBox"></p>
+                </form>
+            </section>
+
+            <!-- 3. SEARCH & FILTER BAR -->
+            <section class="panel">
+                <h2 class="panel-title">Search &amp; Filter Showcase</h2>
+                <div class="form-row">
+                    <!-- onkeyup calls displayWatches() whenever the user types -->
+                    <input type="text" id="searchInput" placeholder="Search by Brand or Model..." onkeyup="displayWatches()">
+                    
+                    <!-- onchange calls displayWatches() when dropdown changes -->
+                    <select id="filterMovement" onchange="displayWatches()">
+                        <option value="All">All Movements</option>
+                        <option value="Automatic">Automatic Only</option>
+                        <option value="Manual Wind">Manual Wind Only</option>
+                        <option value="Quartz">Quartz Only</option>
+                    </select>
+                </div>
+            </section>
+
+            <!-- 4. WATCH SHOWCASE GRID -->
+            <section id="watchGrid" class="watch-grid">
+                <!-- Watch cards will be inserted here by JavaScript -->
+            </section>
+        </main>
+    </div>
+
+    <!-- ================= BASIC JAVASCRIPT LOGIC ================= -->
+    <script>
+        // Default fallback image if user leaves the Image URL field empty
+        var defaultWatchImage = "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=600&q=80";
+
+        // 1. Pre-loaded array of 4 classic luxury watches (Array of Objects)
+        var watches = [
+            {
+                id: 1,
+                brand: "Rolex",
+                model: "Submariner Date",
+                movement: "Automatic",
+                diameter: 41,
+                price: 14500,
+                image: "https://images.unsplash.com/photo-1547996160-81dfa63595aa?auto=format&fit=crop&w=600&q=80",
+                favorite: true
+            },
+            {
+                id: 2,
+                brand: "Omega",
+                model: "Speedmaster Moonwatch",
+                movement: "Manual Wind",
+                diameter: 42,
+                price: 7600,
+                image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80",
+                favorite: false
+            },
+            {
+                id: 3,
+                brand: "Patek Philippe",
+                model: "Nautilus 5711",
+                movement: "Automatic",
+                diameter: 40,
+                price: 115000,
+                image: "https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?auto=format&fit=crop&w=600&q=80",
+                favorite: true
+            },
+            {
+                id: 4,
+                brand: "Seiko",
+                model: "Presage Cocktail Time",
+                movement: "Automatic",
+                diameter: 40,
+                price: 450,
+                image: "https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&w=600&q=80",
+                favorite: false
+            }
+        ];
+
+        // 2. Function to display watches on the screen
+        function displayWatches() {
+            var grid = document.getElementById("watchGrid");
+            var searchText = document.getElementById("searchInput").value.toLowerCase();
+            var selectedMovement = document.getElementById("filterMovement").value;
+
+            // Clear current grid HTML before rebuilding it
+            grid.innerHTML = "";
+
+            // Loop through all watches in our array
+            for (var i = 0; i < watches.length; i++) {
+                var w = watches[i];
+
+                // Check if watch matches the search box (Brand or Model)
+                var matchesSearch = w.brand.toLowerCase().includes(searchText) ||
+                                    w.model.toLowerCase().includes(searchText);
+
+                // Check if watch matches the Movement dropdown filter
+                var matchesMovement = (selectedMovement === "All") || (w.movement === selectedMovement);
+
+                // Only show the card if it matches BOTH search and filter
+                if (matchesSearch && matchesMovement) {
+                    
+                    // Set favorite classes and button label
+                    var cardClass = w.favorite ? "watch-card favorite-border" : "watch-card";
+                    var favBtnClass = w.favorite ? "btn-fav active" : "btn-fav";
+                    var favBtnText = w.favorite ? "★ Favorited" : "☆ Favorite";
+
+                    // Build simple HTML card string
+                    var cardHTML = 
+                        '<div class="' + cardClass + '">' +
+                            '<div>' +
+                                '<img src="' + w.image + '" alt="' + w.model + '" onerror="this.src=\'https://placehold.co/600x400/1c2230/d4af37?text=Luxury+Watch\'">' +
+                                '<span class="badge">' + w.movement + '</span>' +
+                                '<p class="watch-brand">' + w.brand + '</p>' +
+                                '<h3 class="watch-model">' + w.model + '</h3>' +
+                                '<p class="watch-details">Case Diameter: ' + w.diameter + ' mm</p>' +
+                                '<p class="watch-price">$' + w.price.toLocaleString() + '</p>' +
+                            '</div>' +
+                            '<div class="card-actions">' +
+                                '<button class="' + favBtnClass + '" onclick="toggleFavorite(' + w.id + ')">' + favBtnText + '</button>' +
+                                '<button class="btn-delete" onclick="removeWatch(' + w.id + ')">Remove</button>' +
+                            '</div>' +
+                        '</div>';
+
+                    // Add card to the grid
+                    grid.innerHTML += cardHTML;
+                }
+            }
+
+            // Also update the top summary numbers whenever the list updates
+            updateStats();
+        }
+
+        // 3. Function to calculate and update the top Summary Statistics Bar
+        function updateStats() {
+            var totalWatches = watches.length;
+            var totalCollectionValue = 0;
+            var mechanicalCount = 0;
+
+            // Loop through watches to add up prices and count mechanical pieces
+            for (var i = 0; i < watches.length; i++) {
+                totalCollectionValue += watches[i].price;
+
+                if (watches[i].movement === "Automatic" || watches[i].movement === "Manual Wind") {
+                    mechanicalCount++;
+                }
+            }
+
+            // Put the calculated numbers into the HTML elements
+            document.getElementById("totalCount").innerHTML = totalWatches;
+            document.getElementById("totalValue").innerHTML = "$" + totalCollectionValue.toLocaleString();
+            document.getElementById("mechanicalCount").innerHTML = mechanicalCount;
+        }
+
+        // 4. Function to add a new watch from the form
+        function addNewWatch(event) {
+            // Stop the page from refreshing when form is submitted
+            event.preventDefault();
+
+            // Read values from the input boxes
+            var brand = document.getElementById("brandInput").value;
+            var model = document.getElementById("modelInput").value;
+            var movement = document.getElementById("movementInput").value;
+            var diameter = Number(document.getElementById("diameterInput").value);
+            var price = Number(document.getElementById("priceInput").value);
+            var image = document.getElementById("imageInput").value;
+
+            // If user didn't enter an image URL, use the default watch image
+            if (image === "") {
+                image = defaultWatchImage;
+            }
+
+            // Create a new watch object
+            var newWatch = {
+                id: Date.now(), // Unique ID using current timestamp
+                brand: brand,
+                model: model,
+                movement: movement,
+                diameter: diameter,
+                price: price,
+                image: image,
+                favorite: false
+            };
+
+            // Add the new watch to our array
+            watches.push(newWatch);
+
+            // Clear the form inputs
+            document.getElementById("watchForm").reset();
+
+            // Refresh the showcase grid
+            displayWatches();
+        }
+
+        // 5. Function to toggle Favorite status on or off
+        function toggleFavorite(watchId) {
+            for (var i = 0; i < watches.length; i++) {
+                if (watches[i].id === watchId) {
+                    // Flip true to false, or false to true
+                    watches[i].favorite = !watches[i].favorite;
+                }
+            }
+            displayWatches();
+        }
+
+        // 6. Function to remove a watch from the collection
+        function removeWatch(watchId) {
+            var updatedList = [];
+
+            // Keep all watches EXCEPT the one with the matching watchId
+            for (var i = 0; i < watches.length; i++) {
+                if (watches[i].id !== watchId) {
+                    updatedList.push(watches[i]);
+                }
+            }
+
+            watches = updatedList;
+            displayWatches();
+        }
+
+        // Run displayWatches() automatically when the page loads for the first time
+        displayWatches();
+    </script>
+</body>
+</html>
